@@ -18,6 +18,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.time.LocalDateTime;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -45,8 +46,8 @@ public class EventControllerTest {
                 .beginEventDateTime(LocalDateTime.of(2020, 7, 29, 14,21 ))
                 .endEventDateTime(LocalDateTime.of(2020, 7, 30 ,14, 21))
                 .basePrice(100)
-                .location("강남역")
                 .maxPrice(200)
+                .location("강남역")
                 .limitOfEnrollment(100)
                 .build();
 
@@ -60,8 +61,13 @@ public class EventControllerTest {
                 .andExpect(jsonPath("id").exists())
                 .andExpect(MockMvcResultMatchers.header().exists(HttpHeaders.LOCATION))
                 .andExpect(MockMvcResultMatchers.header().string(HttpHeaders.CONTENT_TYPE, MediaTypes.HAL_JSON_VALUE))
-                .andExpect(jsonPath("id").value(Matchers.not(100)))
-                .andExpect(jsonPath("free").value(Matchers.not(true )));
+                .andExpect(jsonPath("free").value(false ))
+                .andExpect(jsonPath("offline").value(true ))
+                .andExpect(jsonPath("eventStatus").value(EventStatus.DRAFT.name()))
+                .andExpect(jsonPath("_links.self").exists())
+                .andExpect(jsonPath("_links.query-events").exists())
+                .andExpect(jsonPath("_links.update-event").exists())
+        ;
     }
 
 
@@ -133,8 +139,10 @@ public class EventControllerTest {
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$[0].objectName").exists())
                 .andExpect(jsonPath("$[0].defaultMessage").exists())
-                .andExpect(jsonPath("$[0].code").exists())
+                .andExpect(jsonPath("$[0].code").exists());
     }
+
+
 
 
 
