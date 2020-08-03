@@ -35,7 +35,7 @@ public class AccountServiceTest {
                 .password(password)
                 .roles(Set.of(AccountRole.ADMIN)).build();
 
-        Account save = this.accountRepository.save(account);
+        Account save = this.accountService.saveAccount(account);
 
 
         //When
@@ -57,5 +57,6 @@ public class AccountServiceTest {
             assertThat(e.getMessage()).containsSequence(username);
         }
     }
+
 
 }
