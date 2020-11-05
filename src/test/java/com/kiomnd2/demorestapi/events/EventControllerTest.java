@@ -21,7 +21,6 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.time.LocalDateTime;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.restdocs.headers.HeaderDocumentation.*;
 import static org.springframework.restdocs.hypermedia.HypermediaDocumentation.linkWithRel;
 import static org.springframework.restdocs.hypermedia.HypermediaDocumentation.links;
@@ -81,7 +80,8 @@ public class EventControllerTest {
                         links(
                                 linkWithRel("self").description("link to self"),
                                 linkWithRel("query-events").description("link to query events"),
-                                linkWithRel("update-events").description("link to update an existing event")
+                                linkWithRel("update-events").description("link to update an existing event"),
+                                linkWithRel("profile").description("profile")
                         ),
                         requestHeaders(
                                 headerWithName(HttpHeaders.ACCEPT).description("accept header"),
@@ -121,7 +121,8 @@ public class EventControllerTest {
                                 fieldWithPath("eventStatus").description("Event Status"),
                                 fieldWithPath("_links.self.href").description("Link to self"),
                                 fieldWithPath("_links.query-events.href").description("Link to query event"),
-                                fieldWithPath("_links.update-event.href").description("Link to update event")
+                                fieldWithPath("_links.update-events.href").description("Link to update event"),
+                                fieldWithPath("_links.profile.href").description("Link to profile")
                         )
                 ));
     }
