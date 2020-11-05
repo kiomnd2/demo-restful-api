@@ -13,8 +13,4 @@ public class DemoRestApiApplication {
     }
 
 
-    @Bean
-    public ModelMapper modelMapper() {
-        return new ModelMapper();
-    }
 }
