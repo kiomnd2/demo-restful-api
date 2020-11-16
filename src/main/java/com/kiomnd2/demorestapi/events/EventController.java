@@ -1,6 +1,7 @@
 package com.kiomnd2.demorestapi.events;
 
 
+import com.kiomnd2.demorestapi.events.common.ErrorsResource;
 import com.kiomnd2.demorestapi.events.validator.EventValidator;
 import org.modelmapper.ModelMapper;
 import org.springframework.hateoas.Link;
@@ -36,13 +37,14 @@ public class EventController {
 
     @PostMapping
     public ResponseEntity createEvent(@RequestBody @Valid EventDto eventDto, Errors errors) {
+
         if(errors.hasErrors()) {
-            return ResponseEntity.badRequest().body(errors);
+            return badRequest(errors);
         }
 
         eventValidator.validate(eventDto, errors);
         if (errors.hasErrors()) {
-            return ResponseEntity.badRequest().body(errors);
+            return badRequest(errors);
         }
 
 
@@ -58,5 +60,9 @@ public class EventController {
         eventResource.add(selfLinkBuilder.withRel("update-events"));
         eventResource.add(Link.of("/docs/index.html#resources-events-create").withRel("profile"));
         return ResponseEntity.created(createdUri).body(eventResource);
+    }
+
+    private ResponseEntity<ErrorsResource> badRequest(Errors errors) {
+        return ResponseEntity.badRequest().body(new ErrorsResource(errors));
     }
 }
